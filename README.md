@@ -5,7 +5,8 @@ Git repository for understanding [Brandes' algorithm](http://www.uvm.edu/pdodds/
 ## Version History
 | Version | Date  | Commit | Notes |
 | :-----: | :-: | :-: | :-: |
-| 0.0 | April 24, 2021 | [79bd987](https://github.com/TeraokaKanekoLab/Brandes/commit/79bd987ce69408af5acf7b39e5afae254a72edc5) | first commit |
+| 0.0 | April 23, 2021 | [79bd987](https://github.com/TeraokaKanekoLab/Brandes/commit/79bd987ce69408af5acf7b39e5afae254a72edc5) | first commit |
+| 0.1 | April 23, 2021 | [cb984f1](https://github.com/TeraokaKanekoLab/Brandes/commit/cb984f11d7de3ad19f8051699f62a073526f040d) | Add graph class |
 
 ## Graph Data File Format
 The graph data files need to follow the rule below. `<endpoint n>` needs to be an int (node id)
