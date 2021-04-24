@@ -28,5 +28,10 @@ if __name__ == "__main__":
     graph = read_graph()
     start = time.time()
     bcs = betweenness_centrality(graph)
+    sum_bc = 0
+    for i in bcs:
+        sum_bc += bcs[i]
+    for i in bcs:
+        print(str(i) + ": " + str(bcs[i] / sum_bc))
     end = time.time()
     print(end - start, "s")

@@ -130,7 +130,10 @@ public:
     void print_betweeness_centrality()
     {
         compute_bc();
+        double sum = 0;
         for (int i = 0; i < num_nodes; ++i)
-            cout << renumbered_to_original[i] << ": " << betweenness_centrality[i] << endl;
+            sum += betweenness_centrality[i];
+        for (int i = 0; i < num_nodes; ++i)
+            cout << renumbered_to_original[i] << ": " << betweenness_centrality[i] / sum << endl;
     }
 };
