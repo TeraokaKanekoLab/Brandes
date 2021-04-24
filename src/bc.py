@@ -26,9 +26,7 @@ def read_graph():
 if __name__ == "__main__":
     start_datetime = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
     graph = read_graph()
+    start = time.time()
     bcs = betweenness_centrality(graph)
-    print(bcs)
-    sum_of_bc = 0
-    for index in bcs:
-        sum_of_bc += bcs[index]
-    print("sum:", sum_of_bc)
+    end = time.time()
+    print(end - start, "s")

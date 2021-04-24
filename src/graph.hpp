@@ -72,10 +72,10 @@ public:
     }
 
     // compute
-    double compute_bc(int nd)
+    void compute_bc()
     {
         if (has_computed_bc)
-            return betweenness_centrality[nd];
+            return;
         has_computed_bc = true;
         for (int s = 0; s < num_nodes; ++s) {
             stack<int> stack;
@@ -114,7 +114,6 @@ public:
                 betweenness_centrality[w] += delta[w];
             }
         }
-        return betweenness_centrality[nd];
     }
 
     // setter
@@ -130,7 +129,8 @@ public:
 
     void print_betweeness_centrality()
     {
+        compute_bc();
         for (int i = 0; i < num_nodes; ++i)
-            cout << renumbered_to_original[i] << ": " << compute_bc(i) << endl;
+            cout << renumbered_to_original[i] << ": " << betweenness_centrality[i] << endl;
     }
 };
