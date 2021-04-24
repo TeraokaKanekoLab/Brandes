@@ -3,32 +3,39 @@
 class Graph {
 private:
     typedef pair<int, int> edge;
-    unordered_map<int, unordered_set<int>> neighbors;
+    unordered_map<int, int> original_to_renumbered;
+    vector<int> renumbered_to_original;
+    vector<vector<int>> neighbors;
+    vector<double> betweenness_centrality;
+    int num_nodes;
     int num_edges;
+    bool has_computed_bc;
 
-    void add_vertex(int v)
+    void add_vertex(int original_id)
     {
-        if (has_vertex(v))
+        if (original_to_renumbered.find(original_id) != original_to_renumbered.end())
             return;
-        neighbors[v] = unordered_set<int>();
+        original_to_renumbered[original_id] = num_nodes;
+        neighbors.push_back(vector<int>());
+        betweenness_centrality.push_back(0);
+        renumbered_to_original.push_back(original_id);
+        ++num_nodes;
     }
 
 public:
     Graph()
     {
+        num_nodes = 0;
         num_edges = 0;
+        has_computed_bc = false;
     }
 
     // getter
-    bool has_vertex(int v)
-    {
-        return neighbors.find(v) != neighbors.end();
-    }
-
     // We assume v is a valid node
     // Otherwise an exception will be triggered
     int get_degree(int v)
     {
+        assert(0 <= v && v < num_nodes);
         return neighbors[v].size();
     }
 
@@ -39,7 +46,7 @@ public:
 
     // We assume v is a valid node
     // Otherwise an exception will be triggered
-    unordered_set<int> get_neighbors(int v)
+    vector<int> get_neighbors(int v)
     {
         return neighbors[v];
     }
@@ -47,26 +54,67 @@ public:
     vector<int> get_vertices()
     {
         vector<int> vertices;
-        for (auto [v, nbrs] : neighbors) {
-            vertices.push_back(v);
+        for (int i = 0; i < num_nodes; ++i) {
+            vertices.push_back(renumbered_to_original[i]);
         }
         return vertices;
     }
 
     void print_graph()
     {
-        for (auto [u, nbrs] : neighbors) {
-            cout << u << ":";
-            for (auto v : nbrs) {
-                cout << " " << v;
+        for (int i = 0; i < num_nodes; ++i) {
+            cout << renumbered_to_original[i] << ":";
+            for (auto v : neighbors[i]) {
+                cout << " " << renumbered_to_original[v];
             }
             cout << endl;
         }
     }
 
-    bool has_neighbor(int u, int v)
+    // compute
+    double compute_bc(int nd)
     {
-        return neighbors[u].find(v) != neighbors[u].end();
+        if (has_computed_bc)
+            return betweenness_centrality[nd];
+        has_computed_bc = true;
+        for (int s = 0; s < num_nodes; ++s) {
+            stack<int> stack;
+            vector<vector<int>> direct_predecessors = vector<vector<int>>(num_nodes, vector<int>());
+            vector<int> num_paths = vector<int>(num_nodes, 0);
+            num_paths[s] = 1;
+            vector<int> d = vector<int>(num_nodes, -1);
+            d[s] = 0;
+            queue<int> visited;
+            visited.push(s);
+
+            while (!visited.empty()) {
+                int v = visited.front();
+                visited.pop();
+                stack.push(v);
+                for (int nbr : neighbors[v]) {
+                    if (d[nbr] < 0) {
+                        visited.push(nbr);
+                        d[nbr] = d[v] + 1;
+                    }
+                    if (d[nbr] == d[v] + 1) {
+                        num_paths[nbr] += num_paths[v];
+                        direct_predecessors[nbr].push_back(v);
+                    }
+                }
+            }
+            vector<double> delta = vector<double>(num_nodes, 0);
+            while (!stack.empty()) {
+                int w = stack.top();
+                stack.pop();
+                for (int pred : direct_predecessors[w])
+                    delta[pred] += (double)num_paths[pred] / num_paths[w] * (1 + delta[w]);
+
+                if (w == s)
+                    continue;
+                betweenness_centrality[w] += delta[w];
+            }
+        }
+        return betweenness_centrality[nd];
     }
 
     // setter
@@ -74,9 +122,15 @@ public:
     {
         add_vertex(u);
         add_vertex(v);
-        if (!has_neighbor(u, v) and !has_neighbor(v, u))
-            ++num_edges;
-        neighbors[u].insert(v);
-        neighbors[v].insert(u);
+        u = original_to_renumbered[u];
+        v = original_to_renumbered[v];
+        neighbors[u].push_back(v);
+        neighbors[v].push_back(u);
+    }
+
+    void print_betweeness_centrality()
+    {
+        for (int i = 0; i < num_nodes; ++i)
+            cout << renumbered_to_original[i] << ": " << compute_bc(i) << endl;
     }
 };
