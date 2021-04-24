@@ -7,7 +7,8 @@ Git repository for understanding [Brandes' algorithm](http://www.uvm.edu/pdodds/
 | :-----: | :-: | :-: | :-: |
 | 0.0 | April 23, 2021 | [79bd987](https://github.com/TeraokaKanekoLab/Brandes/commit/79bd987ce69408af5acf7b39e5afae254a72edc5) | first commit |
 | 0.1 | April 23, 2021 | [cb984f1](https://github.com/TeraokaKanekoLab/Brandes/commit/cb984f11d7de3ad19f8051699f62a073526f040d) | Add graph class |
-| 0.2 | April 23, 2021 | [ba8818f](https://github.com/TeraokaKanekoLab/Brandes/commit/ba8818f6d86bbd4567806320bb0b18cb87967244) | Added NetworkX betweenness centrality calculation program |
+| 0.2 | April 24, 2021 | [ba8818f](https://github.com/TeraokaKanekoLab/Brandes/commit/ba8818f6d86bbd4567806320bb0b18cb87967244) | Added NetworkX betweenness centrality calculation program |
+| 1.0 | April 24, 2021 | [a1d86a4](https://github.com/TeraokaKanekoLab/Brandes/commit/a1d86a401745f6d312efbb233ab31a04329f9761) | Completed betweenness centrality computation |
 
 ## Graph Data File Format
 The graph data files need to follow the rule below. `<endpoint n>` needs to be an int (node id)
